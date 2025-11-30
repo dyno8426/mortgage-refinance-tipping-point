@@ -22,10 +22,10 @@ The code models the trade-off between **Lower Interest Rate Savings** and **Incr
 The analysis compares the total financial commitment from the present date onward.
 
   * **Original Loan Commitment:** The total remaining money paid without refinancing is:
-    $$\text{Original Cost} = (\text{Remaining Principal}) + (\text{Total Remaining Interest})$$
+    `Original Cost = (Remaining Principal) + (Total Remaining Interest)`
 
   * **Refinancing Commitment (Lifetime View):** The total cost of the refinanced loan, reflecting the borrower's goal of ensuring the total cost of the "reset" loan is less than the original remaining commitment. The code uses the most accurate measure: **Total Payments (P\&I)** over the life of the loan. The cost is:
-    $$\text{Refi Cost} = \sum (\text{All } P\&I \text{ Payments on New Loan})$$
+    `Refi Cost = Sum of (All P&I Payments on New Loan)`
     *(This sum is based on the new, higher principal amount that includes the rolled-in fees).*
 
 The tool is designed to find the maximum new rate where **Refi Cost** is lower than the **Original Cost**.
@@ -34,19 +34,25 @@ The tool is designed to find the maximum new rate where **Refi Cost** is lower t
 
 ### 📉 Critical Financial Metrics
 
-#### 1\. Break-Even Period
+The tool calculates two specific tipping points and, for every rate in the output table, computes **four key performance indicators (KPIs)**:
 
-Also known as the **payback period**, this metric is the **number of months** required for the cumulative monthly savings to exactly recoup the cost of the closing fees. If the planned time until sale is **less** than the break-even period, the refinance will result in a net financial loss.
+#### 1\. Performance Indicators Calculated Per Rate
 
-$$\text{Break-Even Months} = \frac{\text{Closing Costs}}{\text{Monthly P\&I Savings}}$$
+The following metrics are computed for each potential new interest rate shown in the output table:
 
-#### 2\. Tipping Point / Break-Even Point
+  * **Monthly P\&I Savings:** The simple monthly reduction in the Principal and Interest payment compared to the original loan.
+  * **Break-Even Period (Months):** Also known as the **payback period**, this is the number of months required for the cumulative monthly savings to exactly recoup the closing fees rolled into the loan.
+    `Break-Even Months = Closing Costs / Monthly P&I Savings`
+  * **Savings at Sale:** The **net financial gain or loss** realized if the property is sold exactly at the user-defined time horizon. This is calculated by comparing the total cash outflow (payments + remaining principal) of the original loan versus the refinanced loan up to the sale date.
+  * **Savings Lifetime:** The **total net financial gain or loss** realized over the entire 30-year term if the property is held for the full duration. This compares the total remaining P\&I payments on the original loan against the total P\&I payments on the new 30-year refinanced loan.
 
-The "tipping point" is the **maximum new interest rate** at which the **total cost** of the refinanced loan equals the **total cost** of keeping the original loan. Any rate below this point results in a net financial gain.
+#### 2\. Tipping Point / Break-Even Point (Rate Thresholds)
+
+The "tipping point" is the **maximum new interest rate** at which the total cost of the refinanced loan equals the total cost of keeping the original loan. Any rate below this point results in a net financial gain.
 
 The tool calculates two specific tipping points:
 
-  * **Time-to-Sell Tipping Point (Practical):** This is the threshold for borrowers planning to sell the property within a defined timeframe. It is the rate that minimizes the **Total Cash Outflow** in the short term. The cost is: $(\text{P}\&I\text{ Payments Made Before Sale}) + (\text{Remaining Principal at Sale Date})$.
+  * **Time-to-Sell Tipping Point (Practical):** This is the threshold for borrowers planning to sell the property within a defined timeframe. It is the rate that minimizes the **Total Cash Outflow** in the short term. The cost is the sum of **P\&I Payments Made Before Sale** and the **Remaining Principal at the Sale Date**.
   * **Entire Loan Lifetime Tipping Point (Theoretical):** This is the rate where the **sum of all P\&I payments on the refinanced loan** (30 years) is less than the sum of the remaining P\&I payments on the original loan.
 
 -----
@@ -115,11 +121,6 @@ python refi_calculator.py --amount 697000 --rate 6.625 --paid 4 --sell-year 2035
 2.  **Amortization:** All calculations use the standard US amortization formula, where monthly payments are constant and interest is compounded monthly on the unpaid principal balance.
 3.  **Refi Costs:** Closing costs are modeled as a fixed percentage (`--costs-pct`) of the **remaining principal** and are **100% rolled into the new loan's principal**. The new loan amount is: `Remaining Principal + Closing Costs`.
 4.  **Payment Timing:** The script accurately infers the **First Payment Date** (e.g., August 2025) based on the current date (Nov 2025) and the number of payments made (`--paid`) to calculate the exact number of total payments until the sale date.
-
-#### Modeled Limitations (Accuracy)
-
-  * **P\&I Only:** The analysis focuses strictly on Principal and Interest (P\&I) payments.
-  * **Total Cost at Sale:** The "Time-to-Sell" tipping point correctly models the total net cost: $(\text{Total } P\&I \text{ Payments}) + (\text{Remaining Principal at Sale})$.
 
 #### Unmodeled Limitations (Simplifications)
 
