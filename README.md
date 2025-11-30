@@ -124,8 +124,8 @@ python refi_calculator.py --amount 697000 --rate 6.625 --paid 4 --sell-year 2035
 
 #### Modeled Limitations (Accuracy)
 
-  * **P&I Only:** The analysis focuses strictly on Principal and Interest (P&I) payments.
-  * **Total Cost at Sale:** The "Time-to-Sell" tipping point correctly models the total net cost: $(\text{Total P\&I Payments}) + (\text{Remaining Principal at Sale})$.
+* **P&I Only:** The analysis focuses strictly on Principal and Interest (P&I) payments.
+* **Total Cost at Sale:** The "Time-to-Sell" tipping point correctly models the total net cost: `(Total P&I Payments) + (Remaining Principal at Sale)`
 
 #### Unmodeled Limitations (Simplifications)
 
