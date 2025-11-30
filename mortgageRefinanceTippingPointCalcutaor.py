@@ -2,7 +2,7 @@ import numpy as np
 import argparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import sys # Keep sys for exiting on errors
+import sys
 
 # --- UTILITY FUNCTIONS ---
 
@@ -120,7 +120,6 @@ def run_analysis(args):
         if total_cost_refi_at_sale < total_cost_orig_at_sale and tipping_rate_sale is None:
             tipping_rate_sale = r_new
     
-    # Handle cases where tipping points are not found
     if tipping_rate_sale is None: tipping_rate_sale = original_rate
     if tipping_rate_lifetime is None: tipping_rate_lifetime = original_rate
 
@@ -141,6 +140,12 @@ def run_analysis(args):
         pmt_refi = calculate_pmt(cost_refi_loan_amt, r_new, 360)
         monthly_savings = pmt_orig - pmt_refi
 
+        # Break-Even Period (in months)
+        if monthly_savings > 0.01:
+            break_even_months = closing_costs / monthly_savings
+        else:
+            break_even_months = float('inf') # Represents no break-even or a loss
+
         # Savings at Sale
         rem_principal_refi_sale, _, _ = get_loan_status(cost_refi_loan_amt, r_new, 360, refi_payments_until_sale)
         total_payments_refi_at_sale = (pmt_orig * payments_made) + (pmt_refi * refi_payments_until_sale)
@@ -154,6 +159,7 @@ def run_analysis(args):
         table_data.append({
             'rate': r_new,
             'monthly_savings': monthly_savings,
+            'break_even_months': break_even_months,
             'savings_at_sale': savings_at_sale,
             'savings_lifetime': savings_lifetime
         })
@@ -179,19 +185,25 @@ def run_analysis(args):
     print(f"| **Entire Loan Lifetime** (30 Years) | **{tipping_rate_lifetime:.3f}%** | **{(original_rate - tipping_rate_lifetime):.3f}%** |")
     
     print("\n### 📈 Refinance Comparison Table")
-    print("| New Rate | Monthly P&I Savings | Savings at Sale | Savings Lifetime |")
-    print("| :--- | :--- | :--- | :--- |")
+    print("| New Rate | Monthly P&I Savings | Break-Even Period (Months) | Savings at Sale | Savings Lifetime |")
+    print("| :--- | :--- | :--- | :--- | :--- |")
     
     for row in table_data:
         rate_str = f"**{row['rate']:.3f}%**" if row['rate'] <= tipping_rate_sale else f"{row['rate']:.3f}%"
         
+        # Format break-even months
+        if row['break_even_months'] == float('inf'):
+            be_str = "No Break-Even (Loss)"
+        else:
+            be_str = f"{row['break_even_months']:.1f}"
+
         sale_str = f"${row['savings_at_sale']:,.2f}"
         lifetime_str = f"${row['savings_lifetime']:,.2f}"
         
         sale_status = " (LOSS)" if row['savings_at_sale'] < 0.01 and abs(row['savings_at_sale']) > 0.01 else " (GAIN)"
         lifetime_status = " (LOSS)" if row['savings_lifetime'] < 0.01 and abs(row['savings_lifetime']) > 0.01 else " (GAIN)"
         
-        print(f"| {rate_str} | ${row['monthly_savings']:,.2f} | {sale_str}{sale_status} | {lifetime_str}{lifetime_status} |")
+        print(f"| {rate_str} | ${row['monthly_savings']:,.2f} | {be_str} | {sale_str}{sale_status} | {lifetime_str}{lifetime_status} |")
 
 # --- COMMAND LINE ARGUMENT PARSING ---
 

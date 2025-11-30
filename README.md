@@ -1,6 +1,6 @@
 ## 🏡 Mortgage Refinance Tipping Point Calculator
 
-This Python command-line utility provides a comprehensive financial analysis to determine the precise interest rate at which refinancing a 30-year fixed mortgage becomes financially beneficial. It is specifically designed to account for a **defined time horizon until sale** (e.g., 5 or 10 years) versus the traditional calculation over the entire life of the loan.
+This Python command-line utility provides a comprehensive financial analysis to determine the precise interest rate at which refinancing a 30-year fixed mortgage becomes financially beneficial. This critical rate is often referred to as the **tipping point** or **break-even point**. The tool is specifically designed to account for a **defined time horizon until sale** (e.g., 5 or 10 years) versus the traditional calculation over the entire life of the loan.
 
 The tool helps homeowners address a critical financial question: "What is the **minimum interest rate drop** required to make refinancing worthwhile given a specific moving timeline?"
 
@@ -32,14 +32,28 @@ The tool is designed to find the maximum new rate where **Refi Cost** is lower t
 
 -----
 
-### 📉 What is the "Tipping Point"?
+### 📉 Critical Financial Metrics
+
+#### 1\. Break-Even Period
+
+Also known as the **payback period**, this metric is the **number of months** required for the cumulative monthly savings to exactly recoup the cost of the closing fees. If the planned time until sale is **less** than the break-even period, the refinance will result in a net financial loss.
+
+$$\text{Break-Even Months} = \frac{\text{Closing Costs}}{\text{Monthly P\&I Savings}}$$
+
+#### 2\. Tipping Point / Break-Even Point
 
 The "tipping point" is the **maximum new interest rate** at which the **total cost** of the refinanced loan equals the **total cost** of keeping the original loan. Any rate below this point results in a net financial gain.
 
 The tool calculates two specific tipping points:
 
-1.  **Time-to-Sell Tipping Point (Practical):** This is the threshold for borrowers planning to sell the property within a defined timeframe. It is calculated by comparing the **Total Cash Outflow** in the short term. The cost is: $(\text{P}\&I\text{ Payments Made Before Sale}) + (\text{Remaining Principal at Sale Date})$.
-2.  **Entire Loan Lifetime Tipping Point (Theoretical):** This is the rate where the **sum of all P\&I payments on the refinanced loan** (30 years) is less than the sum of the remaining P\&I payments on the original loan.
+  * **Time-to-Sell Tipping Point (Practical):** This is the threshold for borrowers planning to sell the property within a defined timeframe. It is the rate that minimizes the **Total Cash Outflow** in the short term. The cost is: $(\text{P}\&I\text{ Payments Made Before Sale}) + (\text{Remaining Principal at Sale Date})$.
+  * **Entire Loan Lifetime Tipping Point (Theoretical):** This is the rate where the **sum of all P\&I payments on the refinanced loan** (30 years) is less than the sum of the remaining P\&I payments on the original loan.
+
+-----
+
+### 🔎 SEO and Financial Context
+
+This tool is a crucial resource for **mortgage rate analysis** and **refinancing calculation**. Understanding the **tipping point rate** is key to smart financial planning. Whether evaluating a **cash-out refinance**, a simple **rate-and-term refinance**, or simply tracking the **best time to refinance**, this calculator provides the objective data needed. It answers the common question: "What is my **refinance break-even rate**?" by quantifying the **opportunity cost** of the closing fees against potential long-term interest savings. Use this utility to determine the financial wisdom of **lowering an interest rate** on a **30-year fixed mortgage**.
 
 -----
 
