@@ -122,6 +122,11 @@ python refi_calculator.py --amount 697000 --rate 6.625 --paid 4 --sell-year 2035
 3.  **Refi Costs:** Closing costs are modeled as a fixed percentage (`--costs-pct`) of the **remaining principal** and are **100% rolled into the new loan's principal**. The new loan amount is: `Remaining Principal + Closing Costs`.
 4.  **Payment Timing:** The script accurately infers the **First Payment Date** (e.g., August 2025) based on the current date (Nov 2025) and the number of payments made (`--paid`) to calculate the exact number of total payments until the sale date.
 
+#### Modeled Limitations (Accuracy)
+
+  * **P\&I Only:** The analysis focuses strictly on Principal and Interest (P\&I) payments.
+  * **Total Cost at Sale:** The "Time-to-Sell" tipping point correctly models the total net cost: $(\text{Total } P\&I \text{ Payments}) + (\text{Remaining Principal at Sale})$.
+
 #### Unmodeled Limitations (Simplifications)
 
 The following real-world factors are **NOT** included in this model:
